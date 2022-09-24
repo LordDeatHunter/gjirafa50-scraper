@@ -1,3 +1,5 @@
+import os
+
 import requests
 from bs4 import BeautifulSoup as bs4
 from tqdm import tqdm
@@ -31,6 +33,10 @@ for i, category in enumerate(categories.keys()):
 
 indexes = input(
     'Eneter categories (use , for multiple categories): ').split(',')
+
+if not os.path.exists('discounted_products'):
+    os.mkdir('discounted_products')
+
 for index in indexes:
     category = list(categories.items())[int(index)]
 
@@ -57,5 +63,5 @@ for index in indexes:
     lines.sort(key=lambda x: int(x['discount'].replace('%', '')))
     string_lines = map(
         lambda x: f"{x['discount']} ({x['old_price']} -> {x['new_price']}) - {x['href']}", lines)
-    with open(f"{category[0]}.txt", 'w') as f:
+    with open(f"discounted_products/{category[0]}.txt", 'w') as f:
         f.write('\n'.join(string_lines))
