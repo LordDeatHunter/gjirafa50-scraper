@@ -2,3 +2,8 @@
 Scarper for [Gjirafa](https://gjirafa50.mk/)
 
 Very work in progress. Currently, only outputs files with sorted discounted products.
+
+## Installation
+```sh
+pip install -r requirements.txt
+```
