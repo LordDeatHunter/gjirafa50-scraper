@@ -4,7 +4,6 @@ import requests
 from bs4 import BeautifulSoup as bs4
 from tqdm import tqdm
 
-lines = []
 categories = {
     'headphones-and-microphones': 2354,
     'headphones': 2366,
@@ -38,6 +37,7 @@ if not os.path.exists('discounted_products'):
     os.mkdir('discounted_products')
 
 for index in indexes:
+    lines = []
     category = list(categories.items())[int(index)]
 
     url = 'https://gjirafa50.mk/category/products'
