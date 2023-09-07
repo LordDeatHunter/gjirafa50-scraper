@@ -15,7 +15,7 @@ categories = {
     'keyboards': 2279,
     'keyboards-gaming': 2280,
     'gpus': 2561,
-    'monitors': 1659,
+    'monitors': 2160,
     'gaming-monitors': 2161,
     'monitors-gaming': 2161,
     'gaming-gpus': 2562,
@@ -24,7 +24,10 @@ categories = {
     'gaming-headphones': 1749,
     'gaming-mice': 1740,
     'multimedia-gpus': 2567,
-    'gpus-accessories': 2569
+    'gpus-accessories': 2569,
+    'computers': 1180,
+    'laptops': 1205,
+    'chairs-2': 1784
 }
 print('Available categories:')
 for i, category in enumerate(categories.keys()):
@@ -37,17 +40,17 @@ if not os.path.exists('discounted_products'):
     os.mkdir('discounted_products')
 
 for index in indexes:
+    print(f"Parsing category index: {category[0]}")
+
     lines = []
     category = list(categories.items())[int(index)]
 
     url = 'https://gjirafa50.mk/category/products'
-    total_pages = requests.get(f"{url}?categoryId={category[1]}").json()[
-        'totalpages']
+    total_pages = requests.get(f"{url}?categoryId={category[1]}").json()['totalpages']
     for i in tqdm(range(total_pages)):
-        response = requests.get(
-            f"{url}?categoryId={category[1]}&pagenumber={i}")
+        response = requests.get(f"{url}?categoryId={category[1]}&pagenumber={i}")
         soup = bs4(response.json()['html'], 'html.parser')
-        items = soup.find_all('div', {'class': 'item-box'})
+        items = soup.find_all('div', {'class': 'product-item'})
         for item in items:
             href = item.find('a')['href']
             prices = item.find_all('span', {'class': 'price'})
@@ -55,7 +58,7 @@ for index in indexes:
             if not discount:
                 continue
             lines.append({
-                'discount': discount.span.text.strip(),
+                'discount': discount.text.strip(),
                 'old_price': prices[1].text.strip(),
                 'new_price': prices[0].text.strip(),
                 'href': f"https://gjirafa50.mk{href}"
